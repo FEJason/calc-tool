@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist # 打包输出目录
-          target-folder: calc-tool # 指定子目录，即你的项目在 https://name.github.io/calc-tool/
+          destination_dir: calc-tool # 指定子目录，即你的项目在 https://name.github.io/calc-tool/
 
   # 部署工作
   deploy:
