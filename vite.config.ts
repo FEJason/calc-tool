@@ -7,7 +7,11 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(() => {
   return {
-    base: './calc-tool',
+    base: '/calc-tool/',
+    build: {
+      assetsDir: 'assets', // 静态资源的存放路径，默认为"assets"
+      outDir: 'dist' // 打包输出路径，默认为"dist"
+    },
     server: {
       host: true,
       port: 2505,
