@@ -1,6 +1,4 @@
-# 构建 VitePress 站点并将其部署到 GitHub Pages 的示例工作流程
-#
-name: 将VitePress站点部署到Pages
+name: 将 calc-tool 项目部署到Pages
 
 on:
   # 在针对 `main` 分支的推送上运行。如果你
@@ -51,7 +49,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist # 打包输出目录
-          destination_dir: calc-tool # 指定子目录，即你的项目在 https://name.github.io/calc-tool/
 
   # 部署工作
   deploy:

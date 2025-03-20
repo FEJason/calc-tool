@@ -7,7 +7,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(() => {
   return {
-    base: './',
+    base: './calc-tool',
     server: {
       host: true,
       port: 2505,
