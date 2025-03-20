@@ -7,10 +7,12 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 - Node.js 20+
 
 ## 构建
+
 ```sh
 yarn
 
 yarn dev
 
 yarn build
+
 ```
