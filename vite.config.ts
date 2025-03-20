@@ -7,6 +7,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(() => {
   return {
+    base: './',
     server: {
       host: true,
       port: 2505,
@@ -20,7 +21,7 @@ export default defineConfig(() => {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src'),
+        '@': path.resolve(__dirname, 'src')
       }
     },
     plugins: [
@@ -30,10 +31,8 @@ export default defineConfig(() => {
         resolvers: [ElementPlusResolver()]
       }),
       Components({
-        resolvers: [
-          ElementPlusResolver({ importStyle: 'sass' })
-        ],
-      }),
-    ],
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
+      })
+    ]
   }
 })
