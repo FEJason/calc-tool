@@ -5,7 +5,9 @@
         <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
       </el-input>
     </el-form-item>
-    <p class="subtitle">Fee: 0.018% ({{ feeTotal }}); Stamp duty: 0.1% ({{ stampDuty }})</p>
+    <p class="subtitle">
+      Fee: {{ priceForm.commission }}% ({{ feeTotal }}); Stamp duty: 0.1% ({{ stampDuty }})
+    </p>
   </el-form>
 </template>
 

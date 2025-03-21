@@ -3,10 +3,10 @@
     <!-- 使用动态渲染减少重复代码 -->
     <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
       <el-input
-        v-model="priceForm[field.key]"
-        @input="handleInput(field.key, $event)"
         :readonly="field.readonly"
         :maxlength="field.maxlength"
+        v-model="priceForm[field.key]"
+        @input="handleInput(field.key, $event)"
       >
         <!-- 动态添加 suffix 插槽 -->
         <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>

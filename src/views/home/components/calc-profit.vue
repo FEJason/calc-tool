@@ -1,7 +1,11 @@
 <template>
   <el-form :model="priceForm" label-width="auto" label-position="left">
     <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
-      <el-input v-model="priceForm[field.key]" @input="handleInput(field.key, $event)">
+      <el-input
+        :readonly="field.readonly"
+        v-model="priceForm[field.key]"
+        @input="handleInput(field.key, $event)"
+      >
         <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
       </el-input>
     </el-form-item>
@@ -38,11 +42,7 @@ const priceForm = reactive<PriceForm>({
 })
 
 const handleInput = (field: keyof PriceForm, value: string) => {
-  if (field === 'change') {
-    priceForm[field] = limitDecimalInput(value, 4, true)
-  } else {
-    priceForm[field] = limitDecimalInput(value, 4)
-  }
+  priceForm[field] = limitDecimalInput(value, 4, field === 'change')
   calcProfit()
 }
 
