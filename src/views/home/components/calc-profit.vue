@@ -38,7 +38,11 @@ const priceForm = reactive<PriceForm>({
 })
 
 const handleInput = (field: keyof PriceForm, value: string) => {
-  priceForm[field] = limitDecimalInput(value)
+  if (field === 'change') {
+    priceForm[field] = limitDecimalInput(value, 4, true)
+  } else {
+    priceForm[field] = limitDecimalInput(value, 4)
+  }
   calcProfit()
 }
 

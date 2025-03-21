@@ -51,7 +51,7 @@ const formFields: FormField[] = [
 
 // 处理输入值的通用方法
 const handleInput = (field: keyof PriceForm, value: string) => {
-  priceForm[field] = limitDecimalInput(value, 3)
+  priceForm[field] = limitDecimalInput(value, 4)
   calcChange()
 }
 
