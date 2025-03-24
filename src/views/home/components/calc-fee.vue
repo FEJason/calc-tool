@@ -5,9 +5,11 @@
         <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
       </el-input>
     </el-form-item>
-    <p class="subtitle">
-      Fee: {{ priceForm.commission }}% ({{ feeTotal }}); Stamp duty: 0.1% ({{ stampDuty }})
-    </p>
+    <div class="subtitle">
+      <p>Fee: {{ priceForm.commission }}% ({{ feeTotal }})</p>
+      <p>Stamp duty: 0.1% ({{ stampDuty }}) Other: 3.36</p>
+      <p>totalTaxes ≈ {{ totalTaxes }}</p>
+    </div>
   </el-form>
 </template>
 
@@ -23,29 +25,32 @@ interface FormField {
 interface PriceForm {
   amount: string
   commission: string
-  totalTaxes: string
 }
 
 const priceForm = reactive<PriceForm>({
   amount: '',
-  commission: '0.018',
-  totalTaxes: ''
+  commission: '0.018'
 })
 
 const formFields: FormField[] = [
   { key: 'amount', label: 'Amount', maxlength: 10 },
   { key: 'commission', label: 'Commission', maxlength: 10, suffix: '%' }
-  // { key: 'totalTaxes', label: 'Total taxes', readonly: true }
 ]
 
 const feeTotal = computed(() => {
   const res = Number(priceForm.amount) * (Number(priceForm.commission) / 100)
-  return res.toFixed(2)
+  const str = res > 5 ? Number(res.toFixed(2)) : 5
+  return str
 })
 
 const stampDuty = computed(() => {
   const res = Number(priceForm.amount) * 0.001
-  return res.toFixed(2)
+  return Number(res.toFixed(2))
+})
+
+const totalTaxes = computed(() => {
+  const res = feeTotal.value + stampDuty.value + 3.36
+  return res
 })
 </script>
 

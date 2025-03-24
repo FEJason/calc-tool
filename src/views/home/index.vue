@@ -2,14 +2,14 @@
   <div class="home">
     <CalcChange class="wrap" />
     <CalcProfit class="wrap" />
-    <!-- <CalcFee class="wrap" /> -->
+    <CalcFee class="wrap" />
   </div>
 </template>
 
 <script setup lang="ts">
 import CalcChange from './components/calc-change.vue'
 import CalcProfit from './components/calc-profit.vue'
-// import CalcFee from './components/calc-fee.vue'
+import CalcFee from './components/calc-fee.vue'
 </script>
 
 <style lang="scss" scoped>
