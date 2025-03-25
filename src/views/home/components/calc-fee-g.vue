@@ -44,7 +44,7 @@ interface PriceForm {
 
 const priceForm = reactive<PriceForm>({
   amount: '',
-  rate: '0.94121',
+  rate: '0.92',
   commission: '0.018'
 })
 
@@ -57,8 +57,8 @@ const formFields: FormField[] = [
 const feeTotal = computed(() => {
   const res =
     Number(priceForm.amount) * (Number(priceForm.commission) / 100) * Number(priceForm.rate)
-  const str = res > 5 ? Number(res.toFixed(2)) : 5
-  return str
+  const num = res > 5 ? Number(res.toFixed(2)) : 5
+  return num
 })
 
 const stampDuty = computed(() => {
@@ -85,12 +85,6 @@ const gTransactionLevy = computed(() => {
 const cTransactionLevy = computed(() => {
   const res = Number(priceForm.amount) * 0.0000015 * Number(priceForm.rate)
   return Number(res.toFixed(2))
-})
-
-const otherFee = computed(() => {
-  const res =
-    transferFee.value + LiquidationFees.value + gTransactionLevy.value + cTransactionLevy.value
-  return res.toFixed(2)
 })
 
 const totalTaxes = computed(() => {

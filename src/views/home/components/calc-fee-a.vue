@@ -43,6 +43,7 @@ interface FormField {
 interface PriceForm {
   type: string
   partner: string
+  isExemptFive: string
   amount: string
   commission: string
 }
@@ -50,6 +51,7 @@ interface PriceForm {
 const priceForm = reactive<PriceForm>({
   type: 'Buy',
   partner: 'Sh',
+  isExemptFive: 'Yes',
   amount: '',
   commission: '0.0085'
 })
@@ -62,14 +64,19 @@ const formFields: FormField[] = [
     type: 'radio',
     selectList: ['Sh', 'Sz']
   },
+  { key: 'isExemptFive', label: 'Exempt Five', type: 'radio', selectList: ['Yes', 'No'] },
   { key: 'amount', label: 'Amount', type: 'input', maxlength: 10 },
   { key: 'commission', label: 'Commission', type: 'input', maxlength: 10, suffix: '%' }
 ]
 
 const feeTotal = computed(() => {
-  const res = Number(priceForm.amount) * (Number(priceForm.commission) / 100)
-  // const str = res > 5 ? Number(res.toFixed(2)) : 5
-  return Number(res.toFixed(2))
+  let fee = Number(priceForm.amount) * (Number(priceForm.commission) / 100)
+
+  if (priceForm.isExemptFive !== 'Yes') {
+    fee = fee > 5 ? Number(fee.toFixed(2)) : 5
+  }
+
+  return Number(fee.toFixed(2))
 })
 
 const stampDuty = computed(() => {
@@ -84,8 +91,14 @@ const transferFee = computed(() => {
 
 const totalTaxes = computed(() => {
   let res = feeTotal.value
-  res = priceForm.type === 'Sell' ? res + stampDuty.value : res
-  res = priceForm.partner === 'Sh' ? res + transferFee.value : res
+
+  if (priceForm.type === 'Sell') {
+    res += stampDuty.value
+  }
+
+  if (priceForm.partner === 'Sh') {
+    res += transferFee.value
+  }
 
   return res.toFixed(2)
 })
