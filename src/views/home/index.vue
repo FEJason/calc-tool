@@ -2,9 +2,16 @@
   <div class="home">
     <CalcChange class="wrap" />
     <CalcProfit class="wrap" />
-    <el-button @click="showFee">Fee</el-button>
-    <CalcFeeG class="wrap" v-if="isShowFee" />
-    <CalcFeeA class="wrap" v-if="isShowFee" />
+    <div>
+      <div>
+        <el-button @click="showFeeG">FeeG</el-button>
+      </div>
+      <div class="u-m-t-10">
+        <el-button @click="showFeeA">FeeA</el-button>
+      </div>
+    </div>
+    <CalcFeeG class="wrap" v-show="isShowFeeG" />
+    <CalcFeeA class="wrap" v-show="isShowFeeA" />
   </div>
 </template>
 
@@ -14,9 +21,14 @@ import CalcProfit from './components/calc-profit.vue'
 import CalcFeeG from './components/calc-fee-g.vue'
 import CalcFeeA from './components/calc-fee-a.vue'
 
-const isShowFee = ref(false)
-const showFee = () => {
-  isShowFee.value = !isShowFee.value
+const isShowFeeG = ref(false)
+const showFeeG = () => {
+  isShowFeeG.value = !isShowFeeG.value
+}
+
+const isShowFeeA = ref(false)
+const showFeeA = () => {
+  isShowFeeA.value = !isShowFeeA.value
 }
 </script>
 

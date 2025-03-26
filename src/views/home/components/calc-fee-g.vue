@@ -23,7 +23,10 @@
         <el-icon><ArrowDownBold /></el-icon>
       </template>
     </div>
-    <p class="subtitle u-p-t-10">Total Taxes ≈ {{ totalTaxes }}</p>
+    <p class="subtitle u-p-t-10 u-flex u-row-between">
+      <span>Total Taxes ≈ {{ totalTaxes }}</span>
+      <span>today {{ priceForm.rate }}</span>
+    </p>
   </el-form>
 </template>
 
@@ -103,6 +106,40 @@ const isShowDetails = ref(false)
 const toggleShowDetails = () => {
   isShowDetails.value = !isShowDetails.value
 }
+
+const getRate = async (today: string) => {
+  const res = await fetch('https://v6.exchangerate-api.com/v6/4338afffc401a6ad0858f2d6/latest/HKD')
+  if (res.ok) {
+    const data = await res.json()
+    priceForm.rate = data.conversion_rates.CNY
+
+    const newData = {
+      date: today,
+      baseCurrency: data.base_code,
+      exchangeRates: data.conversion_rates.CNY
+    }
+    localStorage.setItem('exchangeRatesData', JSON.stringify(newData))
+  }
+}
+
+const loadExchangeRates = () => {
+  const today = new Date().toISOString().split('T')[0]
+  const storedData = localStorage.getItem('exchangeRatesData')
+
+  if (storedData) {
+    const parsedData = JSON.parse(storedData)
+    if (parsedData.date === today) {
+      priceForm.rate = parsedData.exchangeRates
+      return
+    }
+  }
+
+  getRate(today)
+}
+
+onMounted(() => {
+  loadExchangeRates()
+})
 </script>
 
 <style lang="scss" scoped>
