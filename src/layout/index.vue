@@ -2,11 +2,7 @@
   <div class="layout-wrap">
     <LayoutHeader />
     <main class="main-wrap">
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
+      <RouterView />
     </main>
   </div>
 </template>
