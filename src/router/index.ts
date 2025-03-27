@@ -10,10 +10,16 @@ const routes = [
     redirect: '/home'
   },
   {
-    name: 'home',
-    path: '/home',
-    component: () => import('@/views/home/index.vue'),
-    meta: { title: 'Home' }
+    path: '/',
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        name: 'home',
+        path: 'home',
+        component: () => import('@/views/home/index.vue'),
+        meta: { title: 'Home' }
+      }
+    ]
   }
 ]
 

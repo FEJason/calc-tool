@@ -8,6 +8,8 @@ import 'element-plus/theme-chalk/src/message.scss'
 import 'element-plus/theme-chalk/src/message-box.scss'
 import 'element-plus/theme-chalk/src/notification.scss'
 
+import 'element-plus/theme-chalk/dark/css-vars.css'
+
 import '@/assets/css/base.scss'
 import '@/assets/css/u-view.scss'
 

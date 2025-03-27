@@ -43,7 +43,7 @@ const showFeeA = () => {
   opacity: 0.6;
   .wrap {
     max-width: 256px;
-    border: 1px solid #dcdfe6;
+    box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
     border-radius: 12px;
     padding: 12px;
   }
