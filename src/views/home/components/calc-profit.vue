@@ -1,15 +1,32 @@
 <template>
-  <el-form :model="priceForm" label-width="auto" label-position="left">
-    <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
-      <el-input
-        :readonly="field.readonly"
-        v-model="priceForm[field.key]"
-        @input="handleInput(field.key, $event)"
-      >
-        <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
-      </el-input>
-    </el-form-item>
-  </el-form>
+  <div>
+    <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+        <el-input
+          :readonly="field.readonly"
+          v-model="priceForm[field.key]"
+          @input="handleInput(field.key, $event)"
+        >
+          <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
+        </el-input>
+      </el-form-item>
+    </el-form>
+
+    <van-form class="form-wrap hidden-lg">
+      <van-cell-group inset>
+        <van-field
+          v-model="priceForm[field.key]"
+          v-for="field in formFields"
+          :key="field.key"
+          :label="field.label"
+          :placeholder="field.label"
+          @update:model-value="handleInput(field.key, $event)"
+        >
+          <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
+        </van-field>
+      </van-cell-group>
+    </van-form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -61,4 +78,8 @@ const calcProfit = () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form-wrap {
+  width: 100%;
+}
+</style>

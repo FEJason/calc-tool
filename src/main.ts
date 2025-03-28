@@ -12,6 +12,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import '@/assets/css/base.scss'
 import '@/assets/css/u-view.scss'
+import '@/assets/css/media.scss'
 
 const app = createApp(App)
 

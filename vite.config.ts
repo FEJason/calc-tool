@@ -3,14 +3,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { ElementPlusResolver, VantResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(() => {
   return {
     base: '/calc-tool/',
     build: {
-      assetsDir: 'assets', // 静态资源的存放路径，默认为"assets"
-      outDir: 'dist' // 打包输出路径，默认为"dist"
+      assetsDir: 'assets',
+      outDir: 'dist'
     },
     server: {
       host: true,
@@ -32,10 +32,10 @@ export default defineConfig(() => {
       vue(),
       AutoImport({
         imports: ['vue', 'vue-router'],
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver(), VantResolver()]
       }),
       Components({
-        resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' }), VantResolver()]
       })
     ]
   }

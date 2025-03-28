@@ -31,4 +31,9 @@ import { Moon, Sunny } from '@element-plus/icons-vue'
   padding: 0 32px;
   // border-bottom: 1px solid var(--el-border-color);
 }
+@media screen and (max-width: 828px) {
+  .header-wrap {
+    padding: 0 20px;
+  }
+}
 </style>

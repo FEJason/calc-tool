@@ -18,4 +18,9 @@ import LayoutHeader from './components/layout-header.vue'
 .main-wrap {
   flex: 1;
 }
+@media screen and (max-width: 828px) {
+  .main-wrap {
+    background-color: var(--van-background);
+  }
+}
 </style>

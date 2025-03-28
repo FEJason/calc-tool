@@ -1,10 +1,14 @@
 <template>
   <el-config-provider :locale="locale" :message="message">
-    <RouterView></RouterView>
+    <van-config-provider :theme="isDark ? 'dark' : ''">
+      <!-- child components -->
+      <RouterView></RouterView>
+    </van-config-provider>
   </el-config-provider>
 </template>
 
 <script setup lang="ts">
+import { isDark } from '@/composables'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
 

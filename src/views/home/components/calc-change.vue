@@ -1,18 +1,35 @@
 <template>
-  <el-form :model="priceForm" label-width="auto" label-position="left">
-    <!-- 使用动态渲染减少重复代码 -->
-    <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
-      <el-input
-        :readonly="field.readonly"
-        :maxlength="field.maxlength"
-        v-model="priceForm[field.key]"
-        @input="handleInput(field.key, $event)"
-      >
-        <!-- 动态添加 suffix 插槽 -->
-        <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
-      </el-input>
-    </el-form-item>
-  </el-form>
+  <div>
+    <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
+      <!-- 使用动态渲染减少重复代码 -->
+      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+        <el-input
+          :readonly="field.readonly"
+          :maxlength="field.maxlength"
+          v-model="priceForm[field.key]"
+          @input="handleInput(field.key, $event)"
+        >
+          <!-- 动态添加 suffix 插槽 -->
+          <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
+        </el-input>
+      </el-form-item>
+    </el-form>
+
+    <van-form class="form-wrap hidden-lg">
+      <van-cell-group inset>
+        <van-field
+          v-model="priceForm[field.key]"
+          v-for="field in formFields"
+          :key="field.key"
+          :label="field.label"
+          :placeholder="field.label"
+          @update:model-value="handleInput(field.key, $event)"
+        >
+          <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
+        </van-field>
+      </van-cell-group>
+    </van-form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -70,4 +87,8 @@ const calcChange = () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form-wrap {
+  width: 100%;
+}
+</style>
