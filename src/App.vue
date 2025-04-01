@@ -1,7 +1,6 @@
 <template>
   <el-config-provider :locale="locale" :message="message">
     <van-config-provider :theme="isDark ? 'dark' : ''">
-      <!-- child components -->
       <RouterView></RouterView>
     </van-config-provider>
   </el-config-provider>

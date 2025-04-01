@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <CalcChange class="wrap" />
-    <CalcProfit class="wrap" />
+    <CalcChange class="wrap" @calcChange="handleCalcChange" />
+    <CalcProfit class="wrap" :change="change" />
     <div class="hidden-xs">
       <div>
         <el-button @click="showFeeG">FeeG</el-button>
@@ -33,6 +33,11 @@ const showFeeG = () => {
 const isShowFeeA = ref(false)
 const showFeeA = () => {
   isShowFeeA.value = !isShowFeeA.value
+}
+
+const change = ref('')
+const handleCalcChange = (val: string) => {
+  change.value = val
 }
 </script>
 

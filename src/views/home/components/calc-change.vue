@@ -66,6 +66,8 @@ const formFields: FormField[] = [
   { key: 'change', label: 'Change', readonly: true, suffix: '%' }
 ]
 
+const emit = defineEmits(['calcChange'])
+
 // 处理输入值的通用方法
 const handleInput = (field: keyof PriceForm, value: string) => {
   priceForm[field] = limitDecimalInput(value, 4)
@@ -84,6 +86,8 @@ const calcChange = () => {
 
   const res = ((currentPriceNum - costPriceNum) / costPriceNum) * 100
   priceForm.change = res.toFixed(2)
+
+  emit('calcChange', priceForm.change)
 }
 </script>
 
