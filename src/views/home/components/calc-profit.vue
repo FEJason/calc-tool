@@ -2,7 +2,7 @@
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
       <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
-        <el-input v-if="field.key === 'profit'" :model-value="calcProfit" readonly></el-input>
+        <el-input v-if="field.key === 'profit'" v-model="calcProfit" readonly></el-input>
         <el-input
           :readonly="field.readonly"
           v-model="priceForm[field.key]"
@@ -16,16 +16,23 @@
 
     <van-form class="form-wrap hidden-lg">
       <van-cell-group inset>
-        <van-field
-          v-model="priceForm[field.key]"
-          v-for="field in formFields"
-          :key="field.key"
-          :label="field.label"
-          :placeholder="field.label"
-          @update:model-value="handleInput(field.key, $event)"
-        >
-          <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
-        </van-field>
+        <template v-for="field in formFields" :key="field.key">
+          <van-field
+            v-model="calcProfit"
+            :label="field.label"
+            readonly
+            v-if="field.key === 'profit'"
+          ></van-field>
+          <van-field
+            v-model="priceForm[field.key]"
+            :label="field.label"
+            :placeholder="field.label"
+            @update:model-value="handleInput(field.key, $event)"
+            v-else
+          >
+            <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
+          </van-field>
+        </template>
       </van-cell-group>
     </van-form>
   </div>
