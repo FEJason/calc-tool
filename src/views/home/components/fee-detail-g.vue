@@ -20,7 +20,7 @@
     </div>
     <p class="subtitle u-p-t-10 u-flex u-row-between">
       <span>Total Taxes ≈ {{ totalTaxes }}</span>
-      <span>today {{ priceForm.rate }}</span>
+      <span>{{ `${priceForm.ratesDate} : FX rates ${priceForm.rates}` }}</span>
     </p>
   </div>
 </template>
@@ -36,37 +36,40 @@ const props = defineProps({
 })
 
 const feeTotal = computed(() => {
-  const res =
+  let fee =
     Number(props.priceForm.amount) *
     (Number(props.priceForm.commission) / 100) *
-    Number(props.priceForm.rate)
-  const num = res > 5 ? Number(res.toFixed(2)) : 5
-  return num
+    Number(props.priceForm.rates)
+
+  if (props.priceForm.isExemptFive !== 'Yes') {
+    fee = fee > 5 ? Number(fee.toFixed(2)) : 5
+  }
+  return Number(fee.toFixed(2))
 })
 
 const stampDuty = computed(() => {
-  const stampDuty = Number(props.priceForm.amount) * 0.001 * Number(props.priceForm.rate)
+  const stampDuty = Number(props.priceForm.amount) * 0.001 * Number(props.priceForm.rates)
   return Number(stampDuty.toFixed(2))
 })
 
 const transferFee = computed(() => {
-  const baseFee = Number(props.priceForm.amount) * 0.00002 * Number(props.priceForm.rate)
-  const fixedFee = 2 * Number(props.priceForm.rate)
+  const baseFee = Number(props.priceForm.amount) * 0.00002 * Number(props.priceForm.rates)
+  const fixedFee = 2 * Number(props.priceForm.rates)
   return Number((baseFee > fixedFee ? baseFee : fixedFee).toFixed(2))
 })
 
 const LiquidationFees = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.0000565 * Number(props.priceForm.rate)
+  const res = Number(props.priceForm.amount) * 0.0000565 * Number(props.priceForm.rates)
   return Number(res.toFixed(2))
 })
 
 const gTransactionLevy = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.000027 * Number(props.priceForm.rate)
+  const res = Number(props.priceForm.amount) * 0.000027 * Number(props.priceForm.rates)
   return Number(res.toFixed(2))
 })
 
 const cTransactionLevy = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.0000015 * Number(props.priceForm.rate)
+  const res = Number(props.priceForm.amount) * 0.0000015 * Number(props.priceForm.rates)
   return Number(res.toFixed(2))
 })
 

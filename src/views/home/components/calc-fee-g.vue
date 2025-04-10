@@ -2,7 +2,12 @@
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
       <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
-        <el-input v-model="priceForm[field.key]">
+        <el-radio-group v-model="priceForm[field.key]" v-if="field.type === 'radio'">
+          <el-radio :value="select" v-for="select in field.selectList" :key="select">
+            {{ select }}
+          </el-radio>
+        </el-radio-group>
+        <el-input v-model="priceForm[field.key]" v-if="field.type === 'input'">
           <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
         </el-input>
       </el-form-item>
@@ -32,34 +37,41 @@ import FeeDetailG from './fee-detail-g.vue'
 interface FormField {
   key: keyof PriceForm
   label: string
+  type?: string
+  selectList?: string[]
   maxlength?: number
   suffix?: string
   readonly?: boolean
 }
 
 interface PriceForm {
+  isExemptFive: string
   amount: string
-  rate: string
+  rates: string
+  ratesDate: string
   commission: string
 }
 
 const priceForm = reactive<PriceForm>({
+  isExemptFive: 'Yes',
   amount: '',
-  rate: '0.92',
-  commission: '0.018'
+  rates: '0.92',
+  ratesDate: '',
+  commission: '0.0085'
 })
 
 const formFields: FormField[] = [
-  { key: 'amount', label: 'Amount', maxlength: 10 },
-  { key: 'rate', label: 'Rate', maxlength: 10 },
-  { key: 'commission', label: 'Commission', maxlength: 10, suffix: '%' }
+  { key: 'isExemptFive', label: 'Exempt Five', type: 'radio', selectList: ['Yes', 'No'] },
+  { key: 'amount', type: 'input', label: 'Amount', maxlength: 10 },
+  { key: 'rates', type: 'input', label: 'Rate', maxlength: 10 },
+  { key: 'commission', type: 'input', label: 'Commission', maxlength: 10, suffix: '%' }
 ]
 
 const getRate = async (today: string) => {
   const res = await fetch('https://v6.exchangerate-api.com/v6/4338afffc401a6ad0858f2d6/latest/HKD')
   if (res.ok) {
     const data = await res.json()
-    priceForm.rate = data.conversion_rates.CNY
+    priceForm.rates = data.conversion_rates.CNY
 
     const newData = {
       date: today,
@@ -77,7 +89,8 @@ const loadExchangeRates = () => {
   if (storedData) {
     const parsedData = JSON.parse(storedData)
     if (parsedData.date === today) {
-      priceForm.rate = parsedData.exchangeRates
+      priceForm.rates = parsedData.exchangeRates
+      priceForm.ratesDate = parsedData.date
       return
     }
   }
