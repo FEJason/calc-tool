@@ -57,7 +57,7 @@ const priceForm = reactive<PriceForm>({
   amount: '',
   rates: '0.92',
   ratesDate: '',
-  commission: '0.0085'
+  commission: '0.01'
 })
 
 const formFields: FormField[] = [
