@@ -9,19 +9,25 @@
       <div class="u-m-t-10">
         <el-button @click="showFeeA">FeeA</el-button>
       </div>
+      <div class="u-m-t-10">
+        <el-button @click="showNationalDebt">National Debt</el-button>
+      </div>
     </div>
     <div class="hidden-lg xs-button-wrap">
       <van-button class="btn" plain @click="showFeeG">FeeG</van-button>
       <van-button class="btn" plain @click="showFeeA">FeeA</van-button>
+      <van-button class="btn" plain @click="showNationalDebt">National Debt</van-button>
     </div>
     <CalcFeeG class="wrap" v-show="isShowFeeG" />
     <CalcFeeA class="wrap" v-show="isShowFeeA" />
+    <calcNationalDebt class="wrap" v-show="isShowNationalDebt" />
   </div>
 </template>
 
 <script setup lang="ts">
 import CalcChange from './components/calc-change.vue'
 import CalcProfit from './components/calc-profit.vue'
+import calcNationalDebt from './components/calc-national-debt.vue'
 import CalcFeeG from './components/calc-fee-g.vue'
 import CalcFeeA from './components/calc-fee-a.vue'
 
@@ -33,6 +39,11 @@ const showFeeG = () => {
 const isShowFeeA = ref(false)
 const showFeeA = () => {
   isShowFeeA.value = !isShowFeeA.value
+}
+
+const isShowNationalDebt = ref(false)
+const showNationalDebt = () => {
+  isShowNationalDebt.value = !isShowNationalDebt.value
 }
 
 const change = ref('')

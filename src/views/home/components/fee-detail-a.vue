@@ -30,9 +30,11 @@ const props = defineProps({
 })
 
 const feeTotal = computed(() => {
-  let fee = Number(props.priceForm.amount) * (Number(props.priceForm.commission) / 100)
+  const { amount, commission, isExemptFive } = props.priceForm
 
-  if (props.priceForm.isExemptFive !== 'Yes') {
+  let fee = Number(amount) * (Number(commission) / 100)
+
+  if (isExemptFive !== 'Yes') {
     fee = fee > 5 ? Number(fee.toFixed(2)) : 5
   }
 

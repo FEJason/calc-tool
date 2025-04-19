@@ -36,40 +36,48 @@ const props = defineProps({
 })
 
 const feeTotal = computed(() => {
-  let fee =
-    Number(props.priceForm.amount) *
-    (Number(props.priceForm.commission) / 100) *
-    Number(props.priceForm.rates)
+  const { amount, commission, rates, isExemptFive } = props.priceForm
 
-  if (props.priceForm.isExemptFive !== 'Yes') {
+  let fee = Number(amount) * (Number(commission) / 100) * Number(rates)
+  if (isExemptFive !== 'Yes') {
     fee = fee > 5 ? Number(fee.toFixed(2)) : 5
   }
   return Number(fee.toFixed(2))
 })
 
 const stampDuty = computed(() => {
-  const stampDuty = Number(props.priceForm.amount) * 0.001 * Number(props.priceForm.rates)
+  const { amount, rates } = props.priceForm
+
+  const stampDuty = Number(amount) * 0.001 * Number(rates)
   return Number(stampDuty.toFixed(2))
 })
 
 const transferFee = computed(() => {
-  const baseFee = Number(props.priceForm.amount) * 0.00002 * Number(props.priceForm.rates)
-  const fixedFee = 2 * Number(props.priceForm.rates)
+  const { amount, rates } = props.priceForm
+
+  const baseFee = Number(amount) * 0.00002 * Number(rates)
+  const fixedFee = 2 * Number(rates)
   return Number((baseFee > fixedFee ? baseFee : fixedFee).toFixed(2))
 })
 
 const LiquidationFees = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.0000565 * Number(props.priceForm.rates)
+  const { amount, rates } = props.priceForm
+
+  const res = Number(amount) * 0.0000565 * Number(rates)
   return Number(res.toFixed(2))
 })
 
 const gTransactionLevy = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.000027 * Number(props.priceForm.rates)
+  const { amount, rates } = props.priceForm
+
+  const res = Number(amount) * 0.000027 * Number(rates)
   return Number(res.toFixed(2))
 })
 
 const cTransactionLevy = computed(() => {
-  const res = Number(props.priceForm.amount) * 0.0000015 * Number(props.priceForm.rates)
+  const { amount, rates } = props.priceForm
+
+  const res = Number(amount) * 0.0000015 * Number(rates)
   return Number(res.toFixed(2))
 })
 
