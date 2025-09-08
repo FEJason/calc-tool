@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <CalcChange class="wrap" @calcChange="handleCalcChange" />
-    <CalcProfit class="wrap" :change="change" />
+    <CalcProfit class="wrap" :change="change" @inputAmount="inputAmount" />
     <div class="hidden-xs">
       <div>
         <el-button @click="showFeeG">FeeG</el-button>
@@ -18,8 +18,8 @@
       <van-button class="btn" plain @click="showFeeA">FeeA</van-button>
       <van-button class="btn" plain @click="showNationalDebt">National Debt</van-button>
     </div>
-    <CalcFeeG class="wrap" v-show="isShowFeeG" />
-    <CalcFeeA class="wrap" v-show="isShowFeeA" />
+    <CalcFeeG class="wrap" :amount="amount" v-show="isShowFeeG" />
+    <CalcFeeA class="wrap" :amount="amount" v-show="isShowFeeA" />
     <calcNationalDebt class="wrap" v-show="isShowNationalDebt" />
   </div>
 </template>
@@ -49,6 +49,11 @@ const showNationalDebt = () => {
 const change = ref('')
 const handleCalcChange = (val: string) => {
   change.value = val
+}
+
+const amount = ref('')
+const inputAmount = (val: string) => {
+  amount.value = val
 }
 </script>
 

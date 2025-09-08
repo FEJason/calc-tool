@@ -34,6 +34,13 @@
 <script setup lang="ts">
 import FeeDetailG from './fee-detail-g.vue'
 
+const props = defineProps({
+  amount: {
+    type: String,
+    default: ''
+  }
+})
+
 interface FormField {
   key: keyof PriceForm
   label: string
@@ -97,6 +104,13 @@ const loadExchangeRates = () => {
 
   getRate(today)
 }
+
+watch(
+  () => props.amount,
+  newQuestion => {
+    priceForm.amount = newQuestion
+  }
+)
 
 onMounted(() => {
   loadExchangeRates()

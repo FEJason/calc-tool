@@ -12,6 +12,13 @@
           <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
         </el-input>
       </el-form-item>
+      <div class="subtitle">
+        <span>Taxes G: {{ mainStore.totalTaxesG }} * 2 ≈ {{ totalTaxesG }}</span>
+        <span>
+          ≈
+          <span class="net-profit">{{ netProfit }}</span>
+        </span>
+      </div>
     </el-form>
 
     <van-form class="form-wrap hidden-lg">
@@ -40,6 +47,9 @@
 
 <script setup lang="ts">
 import { limitDecimalInput } from '@/assets/js/common'
+import { useMainStore } from '@/store/main'
+
+const mainStore = useMainStore()
 
 const props = defineProps({
   change: {
@@ -74,8 +84,13 @@ const priceForm = reactive<PriceForm>({
   profit: ''
 })
 
+const emit = defineEmits(['inputAmount'])
 const handleInput = (field: keyof PriceForm, value: string) => {
   priceForm[field] = limitDecimalInput(value, 4, field === 'change')
+
+  if (field === 'amount') {
+    emit('inputAmount', priceForm[field])
+  }
 }
 
 watch(
@@ -98,10 +113,34 @@ const calcProfit = computed(() => {
   const res = (amountNum * changeNum) / 100
   return res.toFixed(2)
 })
+
+const totalTaxesG = computed(() => {
+  return Number(mainStore.totalTaxesG) * 2
+})
+
+const netProfit = computed(() => {
+  if (calcProfit.value) {
+    return (Math.abs(Number(calcProfit.value)) - totalTaxesG.value).toFixed(2)
+  } else {
+    return
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 .form-wrap {
   width: 100%;
+}
+.subtitle {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--el-text-color-placeholder);
+  .net-profit {
+    font-size: 14px;
+    color: #fff;
+  }
 }
 </style>

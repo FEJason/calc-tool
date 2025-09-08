@@ -26,6 +26,9 @@
 </template>
 
 <script setup lang="ts">
+import { useMainStore } from '@/store/main'
+const mainStore = useMainStore()
+
 const props = defineProps({
   priceForm: {
     type: Object,
@@ -90,6 +93,7 @@ const totalTaxes = computed(() => {
     gTransactionLevy.value +
     cTransactionLevy.value
 
+  mainStore.setTotalTaxesG(res.toFixed(2))
   return res.toFixed(2)
 })
 
