@@ -32,6 +32,7 @@ export default defineConfig(() => {
       vue(),
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
+        dirs: ['src/store/', 'src/composables/', 'src/utils/'],
         resolvers: [ElementPlusResolver(), VantResolver()]
       }),
       Components({

@@ -48,8 +48,8 @@
         <el-slider
           v-model="rate"
           :min="0.5"
-          :max="2"
-          :step="0.1"
+          :max="10"
+          :step="0.5"
           show-input
           input-size="small"
           style="width: 200px"
@@ -73,6 +73,22 @@
           />
         </el-select>
       </el-form-item>
+
+      <el-form-item label="书籍：">
+        <el-select
+          v-model="currentBookName"
+          placeholder="请选择书籍"
+          @change="onBookChange"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="book in books"
+            :key="book.value"
+            :label="book.name"
+            :value="book.value"
+          />
+        </el-select>
+      </el-form-item>
     </el-form>
 
     <el-alert
@@ -89,9 +105,13 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 
-// ===== 响应式状态 =====
-const fullText = ref('') // 完整文本
-const pages = ref([]) // 分页数组
+const books = ref([
+  { name: 'dengxiaopingshidai', value: 'dengxiaoping.txt' },
+  { name: 'caiwuziyouzilu', value: 'caiwuziyou.txt' }
+])
+const currentBookName = ref(books.value[0].value)
+const fullText = ref('')
+const pages = ref([])
 const currentPage = ref(1)
 const currentPageText = ref('')
 const totalPages = ref(1)
@@ -103,24 +123,15 @@ let currentVoice = null
 
 const isSpeaking = ref(false)
 const isPaused = ref(false)
-const status = ref('正在加载书籍...')
+const status = ref('正在加载...')
 const alertType = ref('info')
 const loading = ref(true)
 
 const synth = window.speechSynthesis
 let utterance = null
 
-// 缓存键（可按书名扩展）
-const CACHE_KEY = 'tts-book-page'
-
-// ===== 工具函数：分页 =====
-const paginateText = (text, charsPerPage = 238) => {
-  const pages = []
-  for (let i = 0; i < text.length; i += charsPerPage) {
-    pages.push(text.slice(i, i + charsPerPage))
-  }
-  return pages
-}
+// 获取当前书籍的缓存键
+const getCacheKey = () => `tts-book-page-${currentBookName.value}`
 
 // ===== 加载语音 =====
 const loadVoices = () => {
@@ -128,10 +139,11 @@ const loadVoices = () => {
   voices.value = availableVoices.filter(v => v.lang === 'zh-CN')
 }
 
-// ===== 加载书籍 =====
+// ===== 加载当前书籍 =====
 const loadBookFromPublic = async () => {
+  loading.value = true
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}books/novel.txt`)
+    const response = await fetch(`${import.meta.env.BASE_URL}books/${currentBookName.value}`)
     if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`)
 
     const content = await response.text()
@@ -141,23 +153,31 @@ const loadBookFromPublic = async () => {
     pages.value = paginateText(fullText.value, 238)
     totalPages.value = pages.value.length
 
-    // 尝试从 localStorage 恢复上次页码
-    const saved = localStorage.getItem(CACHE_KEY)
+    // 从 localStorage 恢复该书的进度
+    const cacheKey = getCacheKey()
+    const saved = localStorage.getItem(cacheKey)
+    let restoredPage = 1
     if (saved) {
-      const { page } = JSON.parse(saved)
+      const { page, rate: rateValue } = JSON.parse(saved)
       if (page >= 1 && page <= totalPages.value) {
-        currentPage.value = page
+        restoredPage = page
         status.value = `已恢复至第 ${page} 页`
         alertType.value = 'info'
+        rate.value = rateValue
       }
     }
 
+    currentPage.value = restoredPage
     updateCurrentPageText()
     status.value = `成功加载书籍，共 ${fullText.value.length} 字，${totalPages.value} 页`
     alertType.value = 'success'
   } catch (err) {
     console.error('加载书籍失败:', err)
     fullText.value = ''
+    pages.value = []
+    totalPages.value = 1
+    currentPage.value = 1
+    currentPageText.value = ''
     status.value = `❌ 书籍加载失败：${err.message}`
     alertType.value = 'error'
   } finally {
@@ -180,10 +200,9 @@ const jumpToPage = page => {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
   updateCurrentPageText()
-  // 不自动播放，仅跳转
 }
 
-// 页码变化监听（输入框改变时）
+// 页码变化监听
 const onPageChange = val => {
   if (val >= 1 && val <= totalPages.value) {
     currentPage.value = val
@@ -191,12 +210,14 @@ const onPageChange = val => {
   }
 }
 
-// 保存当前页到缓存
+// 保存当前书籍的阅读进度
 const saveProgress = () => {
+  const cacheKey = getCacheKey()
   localStorage.setItem(
-    CACHE_KEY,
+    cacheKey,
     JSON.stringify({
       page: currentPage.value,
+      rate: rate.value,
       timestamp: Date.now()
     })
   )
@@ -219,7 +240,7 @@ const speakPage = page => {
     return
   }
 
-  stop() // 确保清除之前的朗读
+  stop()
 
   utterance = new SpeechSynthesisUtterance(textToSpeak)
   utterance.rate = rate.value
@@ -228,8 +249,8 @@ const speakPage = page => {
   utterance.onstart = () => {
     isSpeaking.value = true
     isPaused.value = false
-    currentPage.value = page // 同步当前页
-    updateCurrentPageText() // 确保文本同步
+    currentPage.value = page
+    updateCurrentPageText()
     status.value = `正在朗读第 ${page} 页...`
     alertType.value = 'info'
   }
@@ -239,16 +260,14 @@ const speakPage = page => {
     isPaused.value = false
     saveProgress()
 
-    // 自动播放下一页（如果存在且未被用户中断）
     const nextPage = page + 1
     if (nextPage <= totalPages.value && !synth.paused && !synth.pending) {
-      status.value = `第 ${page} 页朗读结束，即将播放第 ${nextPage} 页...`
-      // 延迟一点避免浏览器限制（某些浏览器要求用户交互后才能 speak）
-      setTimeout(() => {
-        if (!isSpeaking.value && !isPaused.value) {
-          speakPage(nextPage)
-        }
-      }, 0)
+      // status.value = `第 ${page} 页朗读结束，即将播放第 ${nextPage} 页...`
+      // setTimeout(() => {
+      // }, 0)
+      if (!isSpeaking.value && !isPaused.value) {
+        speakPage(nextPage)
+      }
     } else {
       status.value = `第 ${page} 页朗读结束`
       alertType.value = 'success'
@@ -266,7 +285,6 @@ const speakPage = page => {
   synth.speak(utterance)
 }
 
-// 播放当前页（对外接口）
 const speakCurrentPage = () => {
   speakPage(currentPage.value)
 }
@@ -302,6 +320,19 @@ const stop = () => {
     alertType.value = 'info'
     saveProgress()
   }
+}
+
+// 切换书籍
+const onBookChange = () => {
+  // 停止当前朗读（避免跨书干扰）
+  stop()
+  // 重置状态
+  currentPage.value = 1
+  totalPages.value = 1
+  pages.value = []
+  currentPageText.value = ''
+  // 加载新书
+  loadBookFromPublic()
 }
 
 // ===== 初始化 =====
