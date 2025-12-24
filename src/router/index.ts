@@ -20,6 +20,13 @@ const routes = [
         meta: { title: 'Home' }
       }
     ]
+  },
+  // 文字转音频
+  {
+    path: '/text-player',
+    name: 'text-player',
+    component: () => import('@/views/text-player/index.vue'),
+    meta: { title: 'TextPlayer' }
   }
 ]
 
