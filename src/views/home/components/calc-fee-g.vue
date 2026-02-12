@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import FeeDetailG from './fee-detail-g.vue'
 
 const { t } = useI18n()

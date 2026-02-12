@@ -26,7 +26,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { useMainStore } from '@/store/main'
 
 const { t } = useI18n()

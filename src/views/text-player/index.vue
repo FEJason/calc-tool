@@ -21,7 +21,9 @@
         @change="onPageChange"
         :disabled="isSpeaking || loading"
       />
-      <el-button size="small" @click="jumpToPage(currentPage)" :disabled="loading">{{ t('jumpTo') }}</el-button>
+      <el-button size="small" @click="jumpToPage(currentPage)" :disabled="loading">{{
+        t('jumpTo')
+      }}</el-button>
     </div>
 
     <!-- 控制按钮 -->
@@ -103,7 +105,6 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { ref, onMounted, watch } from 'vue'
 
 const { t } = useI18n()

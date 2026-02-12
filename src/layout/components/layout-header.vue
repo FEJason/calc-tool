@@ -33,8 +33,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { isDark, toggleDark } from '@/composables'
 import { Moon, Sunny, ArrowDown } from '@element-plus/icons-vue'
 import { switchLocale, getCurrentLocale } from '@/locales'

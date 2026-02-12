@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import CalcChange from './components/calc-change.vue'
 import CalcProfit from './components/calc-profit.vue'
 import calcNationalDebt from './components/calc-national-debt.vue'
