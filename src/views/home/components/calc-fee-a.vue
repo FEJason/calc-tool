@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
-      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="t(field.labelKey)">
         <el-radio-group v-model="priceForm[field.key]" v-if="field.type === 'radio'">
           <el-radio :value="select" v-for="select in field.selectList" :key="select">
-            {{ select }}
+            {{ t(select.toLowerCase()) }}
           </el-radio>
         </el-radio-group>
         <el-input v-model="priceForm[field.key]" v-if="field.type === 'input'">
@@ -28,13 +28,13 @@
               :key="select"
               class="xs-radio-item"
             >
-              {{ select }}
+              {{ t(select.toLowerCase()) }}
             </van-radio>
           </van-radio-group>
           <van-field
             v-model="priceForm[field.key]"
-            :label="field.label"
-            :placeholder="field.label"
+            :label="t(field.labelKey)"
+            :placeholder="t(field.labelKey)"
             v-if="field.type === 'input'"
           >
             <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
@@ -47,13 +47,16 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import FeeDetailA from './fee-detail-a.vue'
+
+const { t } = useI18n()
 
 interface FormField {
   selectList?: string[]
   type?: string
   key: keyof PriceForm
-  label: string
+  labelKey: string
   maxlength?: number
   suffix?: string
   readonly?: boolean
@@ -76,16 +79,16 @@ const priceForm = reactive<PriceForm>({
 })
 
 const formFields: FormField[] = [
-  { key: 'type', label: 'Type', type: 'radio', selectList: ['Buy', 'Sell'] },
+  { key: 'type', labelKey: 'type', type: 'radio', selectList: ['Buy', 'Sell'] },
   {
     key: 'partner',
-    label: 'Partner',
+    labelKey: 'partner',
     type: 'radio',
     selectList: ['Sh', 'Sz']
   },
-  { key: 'isExemptFive', label: 'Exempt Five', type: 'radio', selectList: ['Yes', 'No'] },
-  { key: 'amount', label: 'Amount', type: 'input', maxlength: 10 },
-  { key: 'commission', label: 'Commission', type: 'input', maxlength: 10, suffix: '%' }
+  { key: 'isExemptFive', labelKey: 'exemptFive', type: 'radio', selectList: ['Yes', 'No'] },
+  { key: 'amount', labelKey: 'amount', type: 'input', maxlength: 10 },
+  { key: 'commission', labelKey: 'commission', type: 'input', maxlength: 10, suffix: '%' }
 ]
 </script>
 

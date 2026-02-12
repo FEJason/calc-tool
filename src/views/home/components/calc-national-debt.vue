@@ -1,13 +1,13 @@
 <template>
   <div class="national-debt">
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
-      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="t(field.labelKey)">
         <el-input v-model="priceForm[field.key]" v-if="field.type === 'input'">
           <template v-if="field.suffix" #suffix>{{ field.suffix }}</template>
         </el-input>
       </el-form-item>
-      <p class="subtitle">Fee: {{ fee.toFixed(2) }}</p>
-      <p class="subtitle">Income: {{ income }}</p>
+      <p class="subtitle">{{ t('fee') }}: {{ fee.toFixed(2) }}</p>
+      <p class="subtitle">{{ t('income') }}: {{ income }}</p>
     </el-form>
 
     <van-form class="hidden-lg">
@@ -16,14 +16,14 @@
           v-model="priceForm[field.key]"
           v-for="field in formFields"
           :key="field.key"
-          :label="field.label"
-          :placeholder="field.label"
+          :label="t(field.labelKey)"
+          :placeholder="t(field.labelKey)"
         >
           <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
         </van-field>
         <div class="u-p-16">
-          <p class="subtitle">Fee: {{ fee.toFixed(2) }}</p>
-          <p class="subtitle">Income: {{ income }}</p>
+          <p class="subtitle">{{ t('fee') }}: {{ fee.toFixed(2) }}</p>
+          <p class="subtitle">{{ t('income') }}: {{ income }}</p>
         </div>
       </van-cell-group>
     </van-form>
@@ -31,6 +31,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 interface PriceForm {
   principal: string
   rate: string
@@ -40,7 +44,7 @@ interface PriceForm {
 
 interface FormField {
   key: keyof PriceForm
-  label: string
+  labelKey: string
   type?: string
   suffix?: string
 }
@@ -52,10 +56,10 @@ const priceForm = reactive<PriceForm>({
 })
 
 const formFields: FormField[] = [
-  { key: 'principal', label: 'Principal', type: 'input' },
-  { key: 'rate', label: 'Rate', type: 'input', suffix: '%' },
-  { key: 'days', label: 'Days', type: 'input' },
-  { key: 'feeRate', label: 'Rates', type: 'input', suffix: '%' }
+  { key: 'principal', labelKey: 'principal', type: 'input' },
+  { key: 'rate', labelKey: 'rate', type: 'input', suffix: '%' },
+  { key: 'days', labelKey: 'days', type: 'input' },
+  { key: 'feeRate', labelKey: 'rates', type: 'input', suffix: '%' }
 ]
 
 const fee = computed(() => {

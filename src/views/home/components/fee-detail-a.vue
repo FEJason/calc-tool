@@ -1,25 +1,29 @@
 <template>
   <div>
     <div class="subtitle details" :class="{ 'show-details': isShowDetails }">
-      <p>Fee: {{ priceForm.commission }}% ({{ feeTotal }})</p>
-      <p v-if="priceForm.type === 'Sell'">Stamp Duty: 0.05% ({{ stampDuty }})</p>
-      <p v-if="priceForm.partner === 'Sh'">Transfer Fee(shang hai): 0.001% ({{ transferFee }})</p>
+      <p>{{ t('fee') }}: {{ priceForm.commission }}% ({{ feeTotal }})</p>
+      <p v-if="priceForm.type === 'Sell'">{{ t('stampDuty') }}: 0.05% ({{ stampDuty }})</p>
+      <p v-if="priceForm.partner === 'Sh'">{{ t('transferFeeShanghai') }} ({{ transferFee }})</p>
     </div>
     <div class="more-btn" @click="toggleShowDetails">
       <template v-if="isShowDetails">
-        <span>Hidden fee details</span>
+        <span>{{ t('hideFeeDetails') }}</span>
         <el-icon><ArrowUpBold /></el-icon>
       </template>
       <template v-else>
-        <span>Show fee details</span>
+        <span>{{ t('showFeeDetails') }}</span>
         <el-icon><ArrowDownBold /></el-icon>
       </template>
     </div>
-    <p class="subtitle u-p-t-10">Total Taxes ≈ {{ totalTaxes }}</p>
+    <p class="subtitle u-p-t-10">{{ t('totalTaxes') }} {{ totalTaxes }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const props = defineProps({
   priceForm: {
     type: Object,

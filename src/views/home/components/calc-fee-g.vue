@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
-      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="t(field.labelKey)">
         <el-radio-group v-model="priceForm[field.key]" v-if="field.type === 'radio'">
           <el-radio :value="select" v-for="select in field.selectList" :key="select">
-            {{ select }}
+            {{ t(select.toLowerCase()) }}
           </el-radio>
         </el-radio-group>
         <el-input v-model="priceForm[field.key]" v-if="field.type === 'input'">
@@ -20,8 +20,8 @@
           v-model="priceForm[field.key]"
           v-for="field in formFields"
           :key="field.key"
-          :label="field.label"
-          :placeholder="field.label"
+          :label="t(field.labelKey)"
+          :placeholder="t(field.labelKey)"
         >
           <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
         </van-field>
@@ -32,7 +32,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import FeeDetailG from './fee-detail-g.vue'
+
+const { t } = useI18n()
 
 const props = defineProps({
   amount: {
@@ -43,7 +46,7 @@ const props = defineProps({
 
 interface FormField {
   key: keyof PriceForm
-  label: string
+  labelKey: string
   type?: string
   selectList?: string[]
   maxlength?: number
@@ -68,10 +71,10 @@ const priceForm = reactive<PriceForm>({
 })
 
 const formFields: FormField[] = [
-  { key: 'isExemptFive', label: 'Exempt Five', type: 'radio', selectList: ['Yes', 'No'] },
-  { key: 'amount', type: 'input', label: 'Amount', maxlength: 10 },
-  { key: 'rates', type: 'input', label: 'Rate', maxlength: 10 },
-  { key: 'commission', type: 'input', label: 'Commission', maxlength: 10, suffix: '%' }
+  { key: 'isExemptFive', labelKey: 'exemptFive', type: 'radio', selectList: ['Yes', 'No'] },
+  { key: 'amount', type: 'input', labelKey: 'amount', maxlength: 10 },
+  { key: 'rates', type: 'input', labelKey: 'rate', maxlength: 10 },
+  { key: 'commission', type: 'input', labelKey: 'commission', maxlength: 10, suffix: '%' }
 ]
 
 const getRate = async (today: string) => {

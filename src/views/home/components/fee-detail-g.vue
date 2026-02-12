@@ -1,32 +1,35 @@
 <template>
   <div>
     <div class="subtitle details" :class="{ 'show-details': isShowDetails }">
-      <p>Fee: {{ priceForm.commission }}% ({{ feeTotal }})</p>
-      <p>Stamp Duty: 0.1% ({{ stampDuty }})</p>
-      <p>Transfer Fee: {{ transferFee }}</p>
-      <p>Liquidation Fees: {{ LiquidationFees }}</p>
-      <p>GTransaction Levy: {{ gTransactionLevy }}</p>
-      <p>CTransaction Levy: {{ cTransactionLevy }}</p>
+      <p>{{ t('fee') }}: {{ priceForm.commission }}% ({{ feeTotal }})</p>
+      <p>{{ t('stampDuty') }}: 0.1% ({{ stampDuty }})</p>
+      <p>{{ t('transferFee') }}: {{ transferFee }}</p>
+      <p>{{ t('liquidationFees') }}: {{ LiquidationFees }}</p>
+      <p>{{ t('gTransactionLevy') }}: {{ gTransactionLevy }}</p>
+      <p>{{ t('cTransactionLevy') }}: {{ cTransactionLevy }}</p>
     </div>
     <div class="more-btn" @click="toggleShowDetails">
       <template v-if="isShowDetails">
-        <span>Hidden fee details</span>
+        <span>{{ t('hideFeeDetails') }}</span>
         <el-icon><ArrowUpBold /></el-icon>
       </template>
       <template v-else>
-        <span>Show fee details</span>
+        <span>{{ t('showFeeDetails') }}</span>
         <el-icon><ArrowDownBold /></el-icon>
       </template>
     </div>
     <p class="subtitle u-p-t-10 u-flex u-row-between">
-      <span>Total Taxes ≈ {{ totalTaxes }}</span>
-      <span>{{ `${priceForm.ratesDate} : FX rates ${priceForm.rates}` }}</span>
+      <span>{{ t('totalTaxes') }} {{ totalTaxes }}</span>
+      <span>{{ t('fxRates', { date: priceForm.ratesDate, rates: priceForm.rates }) }}</span>
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { useMainStore } from '@/store/main'
+
+const { t } = useI18n()
 const mainStore = useMainStore()
 
 const props = defineProps({

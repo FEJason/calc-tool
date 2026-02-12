@@ -12,7 +12,7 @@
 
     <!-- 页码选择 -->
     <div class="page-control" style="margin: 16px 0; display: flex; align-items: center; gap: 12px">
-      <span>共 {{ totalPages }} 页</span>
+      <span>{{ t('pageInfo', { totalPages }) }}</span>
       <el-input-number
         v-model="currentPage"
         :min="1"
@@ -21,7 +21,7 @@
         @change="onPageChange"
         :disabled="isSpeaking || loading"
       />
-      <el-button size="small" @click="jumpToPage(currentPage)" :disabled="loading">跳转</el-button>
+      <el-button size="small" @click="jumpToPage(currentPage)" :disabled="loading">{{ t('jumpTo') }}</el-button>
     </div>
 
     <!-- 控制按钮 -->
@@ -32,19 +32,19 @@
         type="success"
         round
       >
-        {{ isPaused ? '▶ 继续' : loading ? '加载中...' : '▶ 播放' }}
+        {{ isPaused ? t('continue') : loading ? t('loading') : t('play') }}
       </el-button>
       <el-button @click="pause" :disabled="!isSpeaking || isPaused" type="warning" round>
-        ⏸ 暂停
+        {{ t('pause') }}
       </el-button>
       <el-button @click="stop" :disabled="!isSpeaking && !isPaused" type="danger" round>
-        ⏹ 停止
+        {{ t('stop') }}
       </el-button>
     </div>
 
     <!-- 设置 -->
     <el-form label-position="left" label-width="80px" class="settings">
-      <el-form-item label="语速：">
+      <el-form-item :label="t('speed')">
         <el-slider
           v-model="rate"
           :min="0.5"
@@ -57,14 +57,14 @@
         <span class="rate-value">{{ rate.toFixed(1) }}x</span>
       </el-form-item>
 
-      <el-form-item label="发音人：">
+      <el-form-item :label="t('voice')">
         <el-select
           v-model="selectedVoiceName"
           placeholder="请选择发音人"
           @change="updateVoice"
           style="width: 240px"
         >
-          <el-option value="" label="默认" />
+          <el-option value="" :label="t('default')" />
           <el-option
             v-for="voice in voices"
             :key="voice.name + voice.lang"
@@ -74,7 +74,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="书籍：">
+      <el-form-item :label="t('book')">
         <el-select
           v-model="currentBookName"
           placeholder="请选择书籍"
@@ -103,7 +103,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ref, onMounted, watch } from 'vue'
+
+const { t } = useI18n()
 
 const books = ref([
   { name: 'dengxiaopingshidai', value: 'dengxiaoping.txt' },
@@ -123,7 +126,7 @@ let currentVoice = null
 
 const isSpeaking = ref(false)
 const isPaused = ref(false)
-const status = ref('正在加载...')
+const status = ref(t('restoring'))
 const alertType = ref('info')
 const loading = ref(true)
 
@@ -161,7 +164,7 @@ const loadBookFromPublic = async () => {
       const { page, rate: rateValue } = JSON.parse(saved)
       if (page >= 1 && page <= totalPages.value) {
         restoredPage = page
-        status.value = `已恢复至第 ${page} 页`
+        status.value = t('restored', { page })
         alertType.value = 'info'
         rate.value = rateValue
       }
@@ -169,7 +172,7 @@ const loadBookFromPublic = async () => {
 
     currentPage.value = restoredPage
     updateCurrentPageText()
-    status.value = `成功加载书籍，共 ${fullText.value.length} 字，${totalPages.value} 页`
+    status.value = t('loaded', { chars: fullText.value.length, pages: totalPages.value })
     alertType.value = 'success'
   } catch (err) {
     console.error('加载书籍失败:', err)
@@ -178,7 +181,7 @@ const loadBookFromPublic = async () => {
     totalPages.value = 1
     currentPage.value = 1
     currentPageText.value = ''
-    status.value = `❌ 书籍加载失败：${err.message}`
+    status.value = t('loadFailed', { error: err.message })
     alertType.value = 'error'
   } finally {
     loading.value = false
@@ -235,7 +238,7 @@ const speakPage = page => {
 
   const textToSpeak = pages.value[page - 1]?.trim()
   if (!textToSpeak) {
-    status.value = `第 ${page} 页无内容`
+    status.value = t('noContent', { page })
     alertType.value = 'warning'
     return
   }
@@ -251,7 +254,7 @@ const speakPage = page => {
     isPaused.value = false
     currentPage.value = page
     updateCurrentPageText()
-    status.value = `正在朗读第 ${page} 页...`
+    status.value = t('speaking', { page })
     alertType.value = 'info'
   }
 
@@ -269,14 +272,14 @@ const speakPage = page => {
         speakPage(nextPage)
       }
     } else {
-      status.value = `第 ${page} 页朗读结束`
+      status.value = t('ended', { page })
       alertType.value = 'success'
     }
   }
 
   utterance.onerror = event => {
     console.error('TTS 错误:', event)
-    status.value = '朗读出错：' + (event.error || '未知错误')
+    status.value = t('error', { error: event.error || '未知错误' })
     alertType.value = 'error'
     isSpeaking.value = false
     isPaused.value = false
@@ -305,7 +308,7 @@ const pause = () => {
   if (synth.speaking && !synth.paused) {
     synth.pause()
     isPaused.value = true
-    status.value = '已暂停'
+    status.value = t('paused')
     alertType.value = 'warning'
     saveProgress()
   }
@@ -316,7 +319,7 @@ const stop = () => {
     synth.cancel()
     isSpeaking.value = false
     isPaused.value = false
-    status.value = '已停止'
+    status.value = t('stopped')
     alertType.value = 'info'
     saveProgress()
   }

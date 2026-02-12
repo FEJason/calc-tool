@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
-      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="t(field.labelKey)">
         <el-input v-if="field.key === 'profit'" v-model="calcProfit" readonly></el-input>
         <el-input
           :readonly="field.readonly"
@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <div class="subtitle">
-        <span>Taxes G: {{ mainStore.totalTaxesG }} * 2 ≈ {{ totalTaxesG }}</span>
+        <span>{{ t('taxesG', { taxes: mainStore.totalTaxesG, total: totalTaxesG }) }}</span>
         <span>
           ≈
           <span class="net-profit">{{ netProfit }}</span>
@@ -26,14 +26,14 @@
         <template v-for="field in formFields" :key="field.key">
           <van-field
             v-model="calcProfit"
-            :label="field.label"
+            :label="t(field.labelKey)"
             readonly
             v-if="field.key === 'profit'"
           ></van-field>
           <van-field
             v-model="priceForm[field.key]"
-            :label="field.label"
-            :placeholder="field.label"
+            :label="t(field.labelKey)"
+            :placeholder="t(field.labelKey)"
             @update:model-value="handleInput(field.key, $event)"
             v-else
           >
@@ -42,7 +42,7 @@
         </template>
       </van-cell-group>
       <div class="subtitle subtitle-xs">
-        <span>Taxes G: {{ mainStore.totalTaxesG }} * 2 ≈ {{ totalTaxesG }}</span>
+        <span>{{ t('taxesG', { taxes: mainStore.totalTaxesG, total: totalTaxesG }) }}</span>
         <span>
           ≈
           <span class="net-profit">{{ netProfit }}</span>
@@ -53,9 +53,11 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { limitDecimalInput } from '@/assets/js/common'
 import { useMainStore } from '@/store/main'
 
+const { t } = useI18n()
 const mainStore = useMainStore()
 
 const props = defineProps({
@@ -73,16 +75,16 @@ interface PriceForm {
 
 interface FormField {
   key: keyof PriceForm
-  label: string
+  labelKey: string
   maxlength?: number
   readonly?: boolean
   suffix?: string
 }
 
 const formFields: FormField[] = [
-  { key: 'amount', label: 'Amount', maxlength: 10 },
-  { key: 'change', label: 'Change', maxlength: 10, suffix: '%' },
-  { key: 'profit', label: 'Profit', readonly: true }
+  { key: 'amount', labelKey: 'amount', maxlength: 10 },
+  { key: 'change', labelKey: 'change', maxlength: 10, suffix: '%' },
+  { key: 'profit', labelKey: 'profit', readonly: true }
 ]
 
 const priceForm = reactive<PriceForm>({

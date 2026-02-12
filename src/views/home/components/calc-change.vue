@@ -2,7 +2,7 @@
   <div>
     <el-form :model="priceForm" label-width="auto" label-position="left" class="hidden-xs">
       <!-- 使用动态渲染减少重复代码 -->
-      <el-form-item v-for="field in formFields" :key="field.key" :label="field.label">
+      <el-form-item v-for="field in formFields" :key="field.key" :label="t(field.labelKey)">
         <el-input
           :readonly="field.readonly"
           :maxlength="field.maxlength"
@@ -21,8 +21,8 @@
           v-model="priceForm[field.key]"
           v-for="field in formFields"
           :key="field.key"
-          :label="field.label"
-          :placeholder="field.label"
+          :label="t(field.labelKey)"
+          :placeholder="t(field.labelKey)"
           @update:model-value="handleInput(field.key, $event)"
         >
           <template v-if="field.suffix" #right-icon>{{ field.suffix }}</template>
@@ -33,8 +33,11 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { reactive } from 'vue'
 import { limitDecimalInput } from '@/assets/js/common'
+
+const { t } = useI18n()
 
 // 定义表单数据的接口
 interface PriceForm {
@@ -46,7 +49,7 @@ interface PriceForm {
 // 定义表单字段配置的接口
 interface FormField {
   key: keyof PriceForm // 确保 key 是 PriceForm 的合法键
-  label: string
+  labelKey: string
   maxlength?: number
   readonly?: boolean
   suffix?: string
@@ -61,9 +64,9 @@ const priceForm = reactive<PriceForm>({
 
 // 定义表单字段配置
 const formFields: FormField[] = [
-  { key: 'costPrice', label: 'Cost price', maxlength: 10 },
-  { key: 'currentPrice', label: 'Current price', maxlength: 10 },
-  { key: 'change', label: 'Change', readonly: true, suffix: '%' }
+  { key: 'costPrice', labelKey: 'costPrice', maxlength: 10 },
+  { key: 'currentPrice', labelKey: 'currentPrice', maxlength: 10 },
+  { key: 'change', labelKey: 'change', readonly: true, suffix: '%' }
 ]
 
 const emit = defineEmits(['calcChange'])

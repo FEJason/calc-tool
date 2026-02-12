@@ -4,19 +4,19 @@
     <CalcProfit class="wrap" :change="change" @inputAmount="inputAmount" />
     <div class="hidden-xs">
       <div>
-        <el-button @click="showFeeG">FeeG</el-button>
+        <el-button @click="showFeeG">{{ t('feeG') }}</el-button>
       </div>
       <div class="u-m-t-10">
-        <el-button @click="showFeeA">FeeA</el-button>
+        <el-button @click="showFeeA">{{ t('feeA') }}</el-button>
       </div>
       <div class="u-m-t-10">
-        <el-button @click="showNationalDebt">National Debt</el-button>
+        <el-button @click="showNationalDebt">{{ t('nationalDebt') }}</el-button>
       </div>
     </div>
     <div class="hidden-lg xs-button-wrap">
-      <van-button class="btn" plain @click="showFeeG">FeeG</van-button>
-      <van-button class="btn" plain @click="showFeeA">FeeA</van-button>
-      <van-button class="btn" plain @click="showNationalDebt">National Debt</van-button>
+      <van-button class="btn" plain @click="showFeeG">{{ t('feeG') }}</van-button>
+      <van-button class="btn" plain @click="showFeeA">{{ t('feeA') }}</van-button>
+      <van-button class="btn" plain @click="showNationalDebt">{{ t('nationalDebt') }}</van-button>
     </div>
     <CalcFeeG class="wrap" :amount="amount" v-show="isShowFeeG" />
     <CalcFeeA class="wrap" :amount="amount" v-show="isShowFeeA" />
@@ -25,11 +25,14 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import CalcChange from './components/calc-change.vue'
 import CalcProfit from './components/calc-profit.vue'
 import calcNationalDebt from './components/calc-national-debt.vue'
 import CalcFeeG from './components/calc-fee-g.vue'
 import CalcFeeA from './components/calc-fee-a.vue'
+
+const { t } = useI18n()
 
 const isShowFeeG = ref(false)
 const showFeeG = () => {

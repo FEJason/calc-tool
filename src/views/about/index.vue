@@ -1,7 +1,11 @@
 <template>
-  <div class="name">about</div>
+  <div class="name">{{ t('about') }}</div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
 
 <style lang="scss" scoped></style>
