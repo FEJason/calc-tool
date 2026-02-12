@@ -41,6 +41,13 @@
           </van-field>
         </template>
       </van-cell-group>
+      <div class="subtitle subtitle-xs">
+        <span>Taxes G: {{ mainStore.totalTaxesG }} * 2 ≈ {{ totalTaxesG }}</span>
+        <span>
+          ≈
+          <span class="net-profit">{{ netProfit }}</span>
+        </span>
+      </div>
     </van-form>
   </div>
 </template>
@@ -142,5 +149,8 @@ const netProfit = computed(() => {
     font-size: 14px;
     color: #fff;
   }
+}
+.subtitle-xs {
+  margin: 0 32px;
 }
 </style>
