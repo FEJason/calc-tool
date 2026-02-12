@@ -37,7 +37,7 @@ const { t } = useI18n()
 
 interface PriceForm {
   principal: string
-  rate: string
+  interestRate: string
   days: string
   feeRate: string
 }
@@ -50,14 +50,14 @@ interface FormField {
 }
 const priceForm = reactive<PriceForm>({
   principal: '',
-  rate: '',
+  interestRate: '',
   days: '',
   feeRate: '0.0001'
 })
 
 const formFields: FormField[] = [
   { key: 'principal', labelKey: 'principal', type: 'input' },
-  { key: 'rate', labelKey: 'rate', type: 'input', suffix: '%' },
+  { key: 'interestRate', labelKey: 'interestRate', type: 'input', suffix: '%' },
   { key: 'days', labelKey: 'days', type: 'input' },
   { key: 'feeRate', labelKey: 'rates', type: 'input', suffix: '%' }
 ]
@@ -68,8 +68,8 @@ const fee = computed(() => {
 })
 
 const income = computed(() => {
-  const { principal, rate, days } = priceForm
-  const res = (Number(principal) * (Number(rate) / 100) * Number(days)) / 365 - fee.value
+  const { principal, interestRate, days } = priceForm
+  const res = (Number(principal) * (Number(interestRate) / 100) * Number(days)) / 365 - fee.value
   return res.toFixed(2)
 })
 </script>

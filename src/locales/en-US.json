@@ -13,6 +13,7 @@
   "taxesG": "Taxes G: {taxes} * 2 ≈ {total}",
   "exemptFive": "Exempt Five",
   "rate": "Rate",
+  "interestRate": "interestRate",
   "commission": "Commission",
   "yes": "Yes",
   "no": "No",

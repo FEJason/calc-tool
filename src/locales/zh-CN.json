@@ -13,6 +13,7 @@
   "taxesG": "税费G: {taxes} * 2 ≈ {total}",
   "exemptFive": "豁免五元",
   "rate": "汇率",
+  "interestRate": "利率",
   "commission": "佣金",
   "yes": "是",
   "no": "否",
