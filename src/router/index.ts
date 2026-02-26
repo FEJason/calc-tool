@@ -18,6 +18,12 @@ const routes = [
         path: 'home',
         component: () => import('@/views/home/index.vue'),
         meta: { title: 'Home' }
+      },
+      {
+        path: '/permanent-portfolio',
+        name: 'permanent-portfolio',
+        component: () => import('@/views/permanent-portfolio/index.vue'),
+        meta: { title: 'Permanent Portfolio' }
       }
     ]
   },
