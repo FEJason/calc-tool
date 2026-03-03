@@ -108,7 +108,7 @@
       <!-- Rebalance Needed -->
       <el-table-column label="Rebalance Needed?(<15% or >35%)">
         <template #default="{ row }">
-          <span :class="row.rebalanceClass">
+          <span v-if="!row.isStockChild" :class="row.rebalanceClass">
             {{ row.rebalanceText || '—' }}
           </span>
         </template>
@@ -122,9 +122,9 @@ import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const defaultStocks = [
-  { code: '513390', name: 'Nasdaq-100 ETF' },
-  { code: '513180', name: 'Hang Seng Tech ETF' },
-  { code: '159338', name: 'CSI A500 ETF' }
+  { code: '513390', name: 'Nasdaq-100 ETF', shares: 1700 },
+  { code: '513180', name: 'Hang Seng Tech ETF', shares: 5100 },
+  { code: '159338', name: 'CSI A500 ETF', shares: 2700 }
 ]
 
 const totalAmount = ref(100000)
@@ -133,7 +133,6 @@ const stockExpanded = ref(true)
 const stockChildren = ref(
   defaultStocks.map(item => ({
     ...item,
-    shares: 0,
     price: undefined,
     currentValue: 0,
     weightPercent: 0,
@@ -147,10 +146,10 @@ const stockChildren = ref(
 const otherAssets = ref([
   {
     name: 'Long-Term Bonds',
-    code: '511090',
+    code: '511130',
     targetRatio: '25%',
     type: 'bond',
-    shares: 0,
+    shares: 100,
     price: undefined,
     currentValue: 0,
     weightPercent: 0,
@@ -163,7 +162,7 @@ const otherAssets = ref([
     code: '511360',
     targetRatio: '25%',
     type: 'cash',
-    shares: 0,
+    shares: 100,
     price: undefined,
     currentValue: 0,
     weightPercent: 0,
@@ -176,7 +175,7 @@ const otherAssets = ref([
     code: '518880',
     targetRatio: '25%',
     type: 'gold',
-    shares: 0,
+    shares: 900,
     price: undefined,
     currentValue: 0,
     weightPercent: 0,
@@ -277,6 +276,9 @@ const totalAssets = computed(() => {
 
 const stockParent = computed(() => {
   const total = stockChildren.value.reduce((sum, r) => sum + (r.currentValue || 0), 0)
+  const stockWeight = totalAssets.value > 0 ? total / totalAssets.value : 0
+  const stockRebalance = stockWeight < 0.15 || stockWeight > 0.35
+
   return {
     isStockParent: true,
     category: 'Stocks (Total)',
@@ -285,9 +287,9 @@ const stockParent = computed(() => {
     shares: null,
     price: '—',
     currentValue: total,
-    weightPercent: totalAssets.value > 0 ? (total / totalAssets.value) * 100 : 0,
-    rebalanceText: '',
-    rebalanceClass: ''
+    weightPercent: stockWeight * 100,
+    rebalanceText: stockRebalance ? 'Yes' : 'No',
+    rebalanceClass: stockRebalance ? 'rebalance-yes' : 'rebalance-no'
   }
 })
 
