@@ -24,16 +24,16 @@ const routes = [
         name: 'permanent-portfolio',
         component: () => import('@/views/permanent-portfolio/index.vue'),
         meta: { title: 'Permanent Portfolio' }
+      },
+      // 文字转音频
+      {
+        path: '/text-player',
+        name: 'text-player',
+        component: () => import('@/views/text-player/index.vue'),
+        meta: { title: 'TextPlayer' }
       }
     ]
   },
-  // 文字转音频
-  {
-    path: '/text-player',
-    name: 'text-player',
-    component: () => import('@/views/text-player/index.vue'),
-    meta: { title: 'TextPlayer' }
-  }
 ]
 
 const router = createRouter({

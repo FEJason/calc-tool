@@ -1,31 +1,27 @@
 <template>
   <div class="portfolio-container">
-    <div class="flex" style="margin-bottom: 16px">
-      <div style="margin-right: 16px">
-        <el-button type="primary" @click="allocateEqually"
-          >⚖️ Allocate Equally (Use Real-Time Prices)</el-button
-        >
-        <el-button @click="fetchAllPrices">🔄 Refresh Market Data</el-button>
-        <el-button type="success" @click="addStockSubItem">+ Add Stock Sub-item</el-button>
-      </div>
-      <div>
-        <el-input-number
-          v-model="totalAmount"
-          :min="1000"
-          :step="1000"
-          style="width: 220px"
-          label="Total Investment Amount"
-        />
-      </div>
+    <div class="btn-wrap">
+      <el-button type="primary" @click="allocateEqually">⚖️ Allocate Equally</el-button>
+      <el-button @click="fetchAllPrices">🔄 Refresh Data</el-button>
+      <el-button type="success" @click="addStockSubItem">+ Add Stock</el-button>
+      <el-input-number
+        v-model="totalAmount"
+        :min="1000"
+        :step="1000"
+        label="Total Investment Amount"
+      />
     </div>
 
     <el-table :data="tableData" border style="width: 100%" :show-summary="false" size="small">
       <!-- Asset Class -->
       <el-table-column prop="category" label="Asset Class" width="180">
         <template #default="{ row, $index }">
-          <span v-if="row.isStockParent">
+          <span class="flex items-center" v-if="row.isStockParent">
             <button class="toggle-btn" @click="toggleStockExpanded">
-              {{ stockExpanded ? '▼' : '▶' }}
+              <el-icon>
+                <CaretBottom v-if="stockExpanded" />
+                <CaretRight v-else />
+              </el-icon>
             </button>
             Stocks (Total)
           </span>
@@ -118,7 +114,6 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const defaultStocks = [
@@ -402,11 +397,25 @@ onMounted(() => {
 .portfolio-container {
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
-  background: #f9f9f9;
+}
+
+.btn-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  gap: 10px;
 }
 
 .flex {
   display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+:deep(.el-button + .el-button) {
+  margin-left: 0;
 }
 
 :deep(.el-table .stock-parent) {
