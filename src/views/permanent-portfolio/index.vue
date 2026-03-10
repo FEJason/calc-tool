@@ -16,8 +16,12 @@
       <!-- Asset Class -->
       <el-table-column prop="category" label="Asset Class" width="180">
         <template #default="{ row, $index }">
-          <span class="flex items-center" v-if="row.isStockParent">
-            <button class="toggle-btn" @click="toggleStockExpanded">
+          <span
+            class="flex items-center cursor"
+            v-if="row.isStockParent"
+            @click="toggleStockExpanded"
+          >
+            <button class="toggle-btn">
               <el-icon>
                 <CaretBottom v-if="stockExpanded" />
                 <CaretRight v-else />
@@ -412,6 +416,10 @@ onMounted(() => {
 
 .items-center {
   align-items: center;
+}
+
+.cursor {
+  cursor: pointer;
 }
 
 :deep(.el-button + .el-button) {
