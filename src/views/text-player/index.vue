@@ -110,7 +110,7 @@ import { ref, onMounted, watch } from 'vue'
 const { t } = useI18n()
 
 const books = ref([
-  { name: 'dengxiaopingshidai', value: 'dengxiaoping.txt' },
+  { name: 'dengxiaopingshidai', value: 'dengxiaopingshidai.txt' },
   { name: 'caiwuziyouzilu', value: 'caiwuziyou.txt' }
 ])
 const currentBookName = ref(books.value[0].value)
