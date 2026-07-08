@@ -25,7 +25,6 @@ const routes = [
         component: () => import('@/views/permanent-portfolio/index.vue'),
         meta: { title: 'Permanent Portfolio' }
       },
-      // 文字转音频
       {
         path: '/text-player',
         name: 'text-player',
@@ -33,7 +32,7 @@ const routes = [
         meta: { title: 'TextPlayer' }
       }
     ]
-  },
+  }
 ]
 
 const router = createRouter({
