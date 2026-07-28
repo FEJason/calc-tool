@@ -84,8 +84,8 @@ for (const w of words.value) {
 <style lang="scss" scoped>
 .today-words { padding: 12px 0; }
 .word-text { font-weight: 600; margin-right: 8px; }
-.phon-text { font-size: 13px; color: var(--van-text-color-2); }
-.brief-mean { font-size: 12px; color: var(--van-text-color-2); display: block; margin-top: 2px; white-space: pre-line; }
+.phon-text { font-size: 15px; color: var(--van-text-color-2); }
+.brief-mean { font-size: 14px; color: var(--van-text-color-2); display: block; margin-top: 2px; white-space: pre-line; }
 .definition { font-size: 14px; color: var(--van-text-color-2); margin-bottom: 4px; }
 .example { font-size: 14px; color: var(--van-text-color-2); font-style: italic; }
 .example.custom { color: var(--van-orange); }
