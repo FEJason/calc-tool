@@ -29,6 +29,7 @@ yarn preview      # 预览构建产物
 - **Hash 路由**（`createWebHashHistory`），`base: '/calc-tool/'`
 - **同组件双 UI**：桌面用 Element Plus，移动端用 Vant，响应式断点 `828px`（`.hidden-xs` / `.hidden-lg`）
 - **自动导入**：`vue`, `vue-router`, `pinia`, `vue-i18n`, `src/store/`, `src/composables/`, `src/utils/` — 无需手动 import 这些模块
+  - `src/composables/` 下组合式函数必须 `use` 开头（如 `useDictionary`），`unplugin-auto-import` 自动扫描该目录所有 `.ts` 文件导出
 - **Element Plus 图标**：全局注册（`main.ts` 中遍历注册所有图标）
 - **暗色模式**：`@vueuse/core` 的 `useDark()`，使用 `element-plus/theme-chalk/dark/css-vars.css`
 - **汇率**：`calc-fee-g.vue` 通过 exchangerate-api.com 获取 HKD/CNY 汇率，缓存到 `localStorage`
@@ -39,10 +40,20 @@ yarn preview      # 预览构建产物
 ## 代码规范
 
 - Prettier（无分号、单引号、tabWidth 2、trailingComma none、printWidth 100）
-- 文件名：kebab-case（组件大驼峰但文件名 kebab-case）
+- 组件文件名：PascalCase（如 `FlashCard.vue`、`DateWords.vue`）
+- 非组件文件：kebab-case（如 `use-dictionary.ts`、`mock-2026.ts`）
 - `@/` alias 指向 `src/`
 - 手动 import Element Plus 组件样式（非全局引入）
 - SCSS 使用 `scoped` 样式和 `:deep()` 穿透
+
+## 注释规范
+
+- **注释语言**：使用中文
+- **组件级注释**：`<script setup>` 顶部添加块注释，说明组件职责、关键 props/events/expose
+- **函数注释**：说明业务目的、触发时机或外部依赖；对接口调用、异步流程、非显而易见逻辑必须注释
+- **Props / Emit / Expose**：`defineProps` / `defineEmits` / `defineExpose` 上方添加单行或块注释，说明含义与类型
+- **关键状态**：`ref` / `reactive` / `computed` 的含义若不能从变量名自明，需注释
+- **避免无意义注释**：不解释变量赋值、简单条件判断或样式属性本身等自明代码
 
 ## 注意
 

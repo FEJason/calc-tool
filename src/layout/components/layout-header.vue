@@ -87,7 +87,8 @@ const activeIndex = ref(0)
 const menuItems = computed(() => [
   { title: 'Calc', path: '/home' },
   { title: 'Permanent Portfolio', path: '/permanent-portfolio' },
-  { title: 'Text Player', path: '/text-player' }
+  { title: 'Text Player', path: '/text-player' },
+  { title: 'Words', path: '/words' }
 ])
 
 // 导航跳转

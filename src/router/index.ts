@@ -30,6 +30,12 @@ const routes = [
         name: 'text-player',
         component: () => import('@/views/text-player/index.vue'),
         meta: { title: 'TextPlayer' }
+      },
+      {
+        path: '/words',
+        name: 'words',
+        component: () => import('@/views/words/index.vue'),
+        meta: { title: 'Words' }
       }
     ]
   }
