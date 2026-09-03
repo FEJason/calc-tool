@@ -33,8 +33,10 @@
 
 <script setup lang="ts">
 import FeeDetailG from './fee-detail-g.vue'
+import { useMainStore } from '@/store/main'
 
 const { t } = useI18n()
+const mainStore = useMainStore()
 
 const props = defineProps({
   amount: {
@@ -117,6 +119,14 @@ watch(
 onMounted(() => {
   loadExchangeRates()
 })
+
+watch(
+  () => priceForm.rates,
+  (val) => {
+    mainStore.setRates(val)
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped></style>

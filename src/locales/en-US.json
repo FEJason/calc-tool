@@ -11,6 +11,7 @@
   "amount": "Amount",
   "profit": "Profit",
   "taxesG": "Taxes G: {taxes} * 2 ≈ {total}",
+  "netProfitHKD": "HKD Net Profit",
   "exemptFive": "Exempt Five",
   "rate": "Rate",
   "interestRate": "interestRate",

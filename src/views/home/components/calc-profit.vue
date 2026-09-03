@@ -19,6 +19,16 @@
           <span class="net-profit">{{ netProfit }}</span>
         </span>
       </div>
+      <div class="subtitle">
+        <div>
+          <span>{{ t('netProfitHKD') }}</span>
+          <span> * {{ Number(mainStore.rates).toFixed(2) }}</span>
+        </div>
+        <span>
+          ≈
+          <span class="net-profit">{{ netProfitHKD }}</span>
+        </span>
+      </div>
     </el-form>
 
     <van-form class="form-wrap hidden-lg">
@@ -46,6 +56,16 @@
         <span>
           ≈
           <span class="net-profit">{{ netProfit }}</span>
+        </span>
+      </div>
+      <div class="subtitle subtitle-xs">
+        <div>
+          <span>{{ t('netProfitHKD') }}</span>
+          <span> * {{ Number(mainStore.rates).toFixed(2) }}</span>
+        </div>
+        <span>
+          ≈
+          <span class="net-profit">{{ netProfitHKD }}</span>
         </span>
       </div>
     </van-form>
@@ -129,6 +149,14 @@ const totalTaxesG = computed(() => {
 const netProfit = computed(() => {
   if (calcProfit.value) {
     return (Math.abs(Number(calcProfit.value)) - totalTaxesG.value).toFixed(2)
+  } else {
+    return
+  }
+})
+
+const netProfitHKD = computed(() => {
+  if (netProfit.value && mainStore.rates) {
+    return (Number(netProfit.value) * Number(mainStore.rates)).toFixed(2)
   } else {
     return
   }

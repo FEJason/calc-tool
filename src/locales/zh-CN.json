@@ -11,6 +11,7 @@
   "amount": "金额",
   "profit": "利润",
   "taxesG": "税费G: {taxes} * 2 ≈ {total}",
+  "netProfitHKD": "港币纯利",
   "exemptFive": "豁免五元",
   "rate": "汇率",
   "interestRate": "利率",
