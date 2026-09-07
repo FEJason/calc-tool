@@ -148,7 +148,8 @@ const totalTaxesG = computed(() => {
 
 const netProfit = computed(() => {
   if (calcProfit.value) {
-    return (Number(calcProfit.value) - totalTaxesG.value).toFixed(2)
+    // 反T利润
+    return (Math.abs(Number(calcProfit.value)) - totalTaxesG.value).toFixed(2)
   } else {
     return
   }
