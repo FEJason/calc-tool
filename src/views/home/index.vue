@@ -1,5 +1,16 @@
 <template>
-  <div class="home">
+  <div class="opacity-control">
+    <span>Opacity</span>
+    <el-slider
+      v-model="opacity"
+      :min="0"
+      :max="1"
+      :step="0.05"
+      :show-tooltip="false"
+      style="width: 100px"
+    />
+  </div>
+  <div class="home" :style="{ opacity }">
     <CalcChange class="wrap" @calcChange="handleCalcChange" />
     <CalcProfit class="wrap" :change="change" @inputAmount="inputAmount" />
     <div class="hidden-xs">
@@ -57,14 +68,27 @@ const amount = ref('')
 const inputAmount = (val: string) => {
   amount.value = val
 }
+
+const opacity = ref(0.3)
 </script>
 
 <style lang="scss" scoped>
+.opacity-control {
+  position: fixed;
+  bottom: 300px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #999;
+  z-index: 10;
+  opacity: 0.2;
+}
 .home {
-  opacity: 0.6;
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  right: 20px;
   display: flex;
   align-items: flex-end;
   gap: 20px;
@@ -76,8 +100,12 @@ const inputAmount = (val: string) => {
   }
 }
 @media screen and (max-width: 828px) {
+  .opacity-control {
+    position: initial;
+    margin: 0 0 12px;
+    padding: 0 20px;
+  }
   .home {
-    opacity: initial;
     padding: 20px 0;
     flex-direction: column;
     align-items: flex-start;
